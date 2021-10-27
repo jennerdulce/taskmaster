@@ -1,14 +1,24 @@
 package com.jennerdulce.taskmaster.activities;
 
+import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAME_KEY;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jennerdulce.taskmaster.R;
 
 public class MainActivity extends AppCompatActivity {
+    public final static String TASK_NAME_STRING = "taskName";
+
+    protected static SharedPreferences sharedPreferences;
+    protected static Resources res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +38,48 @@ public class MainActivity extends AppCompatActivity {
             Intent allTasksIntent = new Intent(MainActivity.this, AllTasksActivity.class);
             startActivity(allTasksIntent);
         });
+
+        // User Settings Intent Button
+        ImageView userSettingsButton = (ImageView) findViewById(R.id.userSettingsImageView);
+        userSettingsButton.setOnClickListener(view -> {
+            Intent userSettingsIntent = new Intent(MainActivity.this, UserSettingsActivity.class);
+            startActivity(userSettingsIntent);
+        });
+
+        // Sample Task One Task Details Intent
+        TextView sampleTaskOne = findViewById(R.id.sampleTaskOne);
+        sampleTaskOne.setOnClickListener(view -> {
+            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskOne.getText());
+            startActivity(taskDetailsIntent);
+        });
+
+        // User Settings Intent Button
+        TextView sampleTaskTwo = findViewById(R.id.sampleTaskTwo);
+        sampleTaskTwo.setOnClickListener(view -> {
+            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskTwo.getText());
+            startActivity(taskDetailsIntent);
+        });
+
+        // User Settings Intent Button
+        TextView sampleTaskThree = findViewById(R.id.sampleTaskThree);
+        sampleTaskThree.setOnClickListener(view -> {
+            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskThree.getText());
+            startActivity(taskDetailsIntent);
+        });
+    }
+
+    // onResume lifecycle
+    @Override
+    protected void onResume(){
+        super.onResume();
+        String username = sharedPreferences.getString(USERNAME_KEY, "");
+
+        if(!username.equals("")){
+            // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
+            ((TextView) findViewById(R.id.welcomeUsernameMessageTextView)).setText(res.getString(R.string.WelcomeUsername, username));
+        }
     }
 }
