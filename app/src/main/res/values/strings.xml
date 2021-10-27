@@ -10,4 +10,14 @@
     <string name="Zero">0</string>
     <string name="Submitted">Submitted!</string>
     <string name="AllTasksHeader">All Tasks</string>
+    <string name="TaskDetailHeader">Task Details</string>
+    <string name="UserSettingsHeader">User Settings</string>
+    <string name="UsernameTitle">Username</string>
+    <string name="SaveButton">Save</string>
+    <string name="SampleTask">Sample Task One</string>
+    <string name="SampleTaskTwo">Sample Task Two</string>
+    <string name="SampleTaskThree">Sample Task Three</string>
+    <string name="LoremText">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="UserSettingsButton">User Settings Button</string>
+    <string name="WelcomeUsername">Welcome %1$s!</string>
 </resources>
