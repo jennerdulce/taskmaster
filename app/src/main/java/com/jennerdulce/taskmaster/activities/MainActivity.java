@@ -3,6 +3,8 @@ package com.jennerdulce.taskmaster.activities;
 import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAME_KEY;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jennerdulce.taskmaster.R;
+import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
+import com.jennerdulce.taskmaster.models.TaskItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public final static String TASK_NAME_STRING = "taskName";
@@ -25,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // RecycleView
+        List<TaskItem> taskItemList = new ArrayList<>();
+        taskItemList.add(new TaskItem("Study", "Finish your assignments.", "Completed"));
+        taskItemList.add(new TaskItem("Gym", "Leg day.", "In progress"));
+        taskItemList.add(new TaskItem("Cook", "Meal prep", "Completed"));
+//
+        RecyclerView recyclerView = findViewById(R.id.taskListRecyclerView);
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(lm);
+
+        TaskRecyclerViewAdapter taskListRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, taskItemList);
+        recyclerView.setAdapter(taskListRecyclerViewAdapter);
 
         // Add Task Intent Button
         Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
@@ -47,29 +67,29 @@ public class MainActivity extends AppCompatActivity {
             startActivity(userSettingsIntent);
         });
 
-        // Sample Task One Task Details Intent
-        TextView sampleTaskOne = findViewById(R.id.sampleTaskOne);
-        sampleTaskOne.setOnClickListener(view -> {
-            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
-            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskOne.getText());
-            startActivity(taskDetailsIntent);
-        });
-
-        // Sample Task Two Task Details Intent
-        TextView sampleTaskTwo = findViewById(R.id.sampleTaskTwo);
-        sampleTaskTwo.setOnClickListener(view -> {
-            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
-            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskTwo.getText());
-            startActivity(taskDetailsIntent);
-        });
-
-        // Sample Task Three Task Details Intent
-        TextView sampleTaskThree = findViewById(R.id.sampleTaskThree);
-        sampleTaskThree.setOnClickListener(view -> {
-            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
-            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskThree.getText());
-            startActivity(taskDetailsIntent);
-        });
+//        // Sample Task One Task Details Intent
+//        TextView sampleTaskOne = findViewById(R.id.sampleTaskOne);
+//        sampleTaskOne.setOnClickListener(view -> {
+//            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+//            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskOne.getText());
+//            startActivity(taskDetailsIntent);
+//        });
+//
+//        // Sample Task Two Task Details Intent
+//        TextView sampleTaskTwo = findViewById(R.id.sampleTaskTwo);
+//        sampleTaskTwo.setOnClickListener(view -> {
+//            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+//            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskTwo.getText());
+//            startActivity(taskDetailsIntent);
+//        });
+//
+//        // Sample Task Three Task Details Intent
+//        TextView sampleTaskThree = findViewById(R.id.sampleTaskThree);
+//        sampleTaskThree.setOnClickListener(view -> {
+//            Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
+//            taskDetailsIntent.putExtra(TASK_NAME_STRING, sampleTaskThree.getText());
+//            startActivity(taskDetailsIntent);
+//        });
     }
 
     // onResume lifecycle

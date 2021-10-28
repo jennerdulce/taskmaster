@@ -59,42 +59,6 @@
         tools:ignore="ImageContrastCheck,RedundantDescriptionCheck" />
 
     <TextView
-        android:id="@+id/sampleTaskOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="@string/SampleTask"
-        android:textColor="#E91E1E"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeUsernameMessageTextView" />
-
-    <TextView
-        android:id="@+id/sampleTaskTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/SampleTaskTwo"
-        android:textColor="#DD2C00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sampleTaskOne" />
-
-    <TextView
-        android:id="@+id/sampleTaskThree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="@string/SampleTaskThree"
-        android:textColor="#DD2C00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.158"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sampleTaskTwo" />
-
-    <TextView
         android:id="@+id/welcomeUsernameMessageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,5 +68,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myTasksHeaderTextView"
         tools:text="Welcome [Name]!" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/taskListRecyclerView"
+        android:layout_width="346dp"
+        android:layout_height="264dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeUsernameMessageTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
