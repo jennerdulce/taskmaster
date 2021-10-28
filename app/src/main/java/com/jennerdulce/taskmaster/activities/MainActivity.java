@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(taskDetailsIntent);
         });
 
-        // User Settings Intent Button
+        // Sample Task Two Task Details Intent
         TextView sampleTaskTwo = findViewById(R.id.sampleTaskTwo);
         sampleTaskTwo.setOnClickListener(view -> {
             Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(taskDetailsIntent);
         });
 
-        // User Settings Intent Button
+        // Sample Task Three Task Details Intent
         TextView sampleTaskThree = findViewById(R.id.sampleTaskThree);
         sampleTaskThree.setOnClickListener(view -> {
             Intent taskDetailsIntent = new Intent(MainActivity.this, TaskDetailActivity.class);
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        // Get preferences
+        res = getResources();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String username = sharedPreferences.getString(USERNAME_KEY, "");
 
         if(!username.equals("")){

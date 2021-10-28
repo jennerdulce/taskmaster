@@ -56,12 +56,12 @@
 
 #### Task Detail Page
 
-![Task Detail Page](screenshots/.png)
+![Task Detail Page](screenshots/taskTitleDisplay.png)
 
 #### Settings Page
 
-![Settings Page](screenshots/.png)
+![Settings Page](screenshots/userSettings.png)
 
 #### Homepage
 
-![Homepage](screenshots/.png)
+![Homepage](screenshots/welcomeDisplay.png)
