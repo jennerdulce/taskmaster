@@ -5,6 +5,7 @@ import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAM
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
+import com.jennerdulce.taskmaster.database.TaskmasterDatabase;
 import com.jennerdulce.taskmaster.models.TaskItem;
 
 import java.util.ArrayList;
@@ -24,21 +26,33 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public final static String TASK_NAME_STRING = "taskName";
-
+    public final static String TASK_ID_STRING = "taskId";
+    public final static String DATABASE_INSTANCE_NAME = "jdd_taskmaster_db";
     protected static SharedPreferences sharedPreferences;
     protected static Resources res;
+
+    TaskmasterDatabase taskmasterDatabase;
+    TaskRecyclerViewAdapter taskRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        res = getResources();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Database
+        taskmasterDatabase = Room.databaseBuilder(getApplicationContext(), TaskmasterDatabase.class, DATABASE_INSTANCE_NAME)
+                .allowMainThreadQueries()
+                .build();
+        List<TaskItem> taskItemList = taskmasterDatabase.taskItemDao().findAll();
         // RecycleView
-        List<TaskItem> taskItemList = new ArrayList<>();
-        taskItemList.add(new TaskItem("Study", "Finish your assignments.", "Completed"));
-        taskItemList.add(new TaskItem("Gym", "Leg day.", "In progress"));
-        taskItemList.add(new TaskItem("Cook", "Meal prep", "Completed"));
-//
+//        List<TaskItem> taskItemList = new ArrayList<>();
+//        taskItemList.add(new TaskItem("Study", "Finish your assignments."));
+//        taskItemList.add(new TaskItem("Gym", "Leg day."));
+//        taskItemList.add(new TaskItem("Cook", "Meal prep"));
+
         RecyclerView recyclerView = findViewById(R.id.taskListRecyclerView);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(lm);
@@ -97,8 +111,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         // Get preferences
-        res = getResources();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        List<TaskItem> taskItemList2 = taskmasterDatabase.taskItemDao().findAll();
+        taskRecyclerViewAdapter.setTaskItemList(taskItemList2);
+        taskRecyclerViewAdapter.notifyDataSetChanged();
         String username = sharedPreferences.getString(USERNAME_KEY, "");
 
         if(!username.equals("")){

@@ -1,5 +1,6 @@
 package com.jennerdulce.taskmaster.adapters;
 
+import static com.jennerdulce.taskmaster.activities.MainActivity.TASK_ID_STRING;
 import static com.jennerdulce.taskmaster.activities.MainActivity.TASK_NAME_STRING;
 
 import android.content.Intent;
@@ -41,9 +42,10 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         View taskItemFragment = holder.itemView;
         TextView currentItemFragmentTextView =   taskItemFragment.findViewById(R.id.currentItemFragmentTextView);
         currentItemFragmentTextView.setText(taskItem.toString());
+
         holder.itemView.setOnClickListener(view -> {
             Intent taskFragmentIntent = new Intent(associatedActivity, TaskDetailActivity.class);
-            taskFragmentIntent.putExtra(TASK_NAME_STRING, taskItem.taskName);
+            taskFragmentIntent.putExtra(TASK_ID_STRING, taskItem.id);
             associatedActivity.startActivity(taskFragmentIntent);
         });
     }
@@ -53,9 +55,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         return taskItemList.size();
     }
 
+    public List<TaskItem> getTaskList() {return taskItemList; }
+
+    public void setTaskItemList(List<TaskItem> taskItemList){
+        this.taskItemList = taskItemList;
+    }
+
     public static class TaskItemViewHolder extends RecyclerView.ViewHolder {
-        // 2.2 Add data items to view holder
-        public TaskItem taskItem;
         public TaskItemViewHolder(@NonNull View itemView){
             super(itemView);
         }
