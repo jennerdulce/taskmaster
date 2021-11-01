@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         taskmasterDatabase = Room.databaseBuilder(getApplicationContext(), TaskmasterDatabase.class, DATABASE_INSTANCE_NAME)
                 .allowMainThreadQueries()
                 .build();
+
         List<TaskItem> taskItemList = taskmasterDatabase.taskItemDao().findAll();
         // RecycleView
 //        List<TaskItem> taskItemList = new ArrayList<>();
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(lm);
 
-        TaskRecyclerViewAdapter taskListRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, taskItemList);
-        recyclerView.setAdapter(taskListRecyclerViewAdapter);
+        taskRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, taskItemList);
+        recyclerView.setAdapter(taskRecyclerViewAdapter);
 
         // Add Task Intent Button
         Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
