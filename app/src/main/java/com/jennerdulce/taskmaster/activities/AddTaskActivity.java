@@ -38,8 +38,10 @@ public class AddTaskActivity extends AppCompatActivity {
         Spinner taskStatusSpinner = findViewById(R.id.taskStatusSpinner);
         taskStatusSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StatusEnum.values()));
         TaskItem taskItem = taskmasterDatabase.taskItemDao().findById(taskId);
-        int spinnerPosition = getSpinnerIndex(taskStatusSpinner, taskItem.state.toString());
-        taskStatusSpinner.setSelection(spinnerPosition);
+        if(taskItem != null){
+            int spinnerPosition = getSpinnerIndex(taskStatusSpinner, taskItem.state.toString());
+            taskStatusSpinner.setSelection(spinnerPosition);
+        }
 
         Button addTaskButton = (Button) findViewById(R.id.addTaskFormButton);
         addTaskButton.setOnClickListener(view -> {

@@ -60,19 +60,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.108"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
+        app:layout_constraintTop_toBottomOf="@+id/taskStatusTextView"
         app:layout_constraintVertical_bias="0.27" />
 
     <TextView
         android:id="@+id/taskCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
         android:text="@string/TotalTaskCount"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addTaskFormButton"
-        app:layout_constraintVertical_bias="0.337" />
+        app:layout_constraintVertical_bias="0.334" />
 
     <TextView
         android:id="@+id/textCountNumberTextView"
@@ -91,30 +92,37 @@
         android:id="@+id/addTaskSubmittedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/addTaskFormButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toEndOf="@+id/addTaskFormButton"
-        app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
-        app:layout_constraintVertical_bias="0.292"
+        app:layout_constraintTop_toTopOf="@+id/addTaskFormButton"
+        app:layout_constraintVertical_bias="0.586"
         tools:text='"Submitted!"' />
 
     <TextView
         android:id="@+id/taskStatusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:text="@string/TaskStatus"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.146"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintVertical_bias="0.005" />
 
     <Spinner
         android:id="@+id/taskStatusSpinner"
-        android:layout_width="247dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="145dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.74"
+        app:layout_constraintStart_toEndOf="@+id/taskStatusTextView"
         app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
-        tools:layout_editor_absoluteX="137dp" />
+        app:layout_constraintVertical_bias="0.088" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
