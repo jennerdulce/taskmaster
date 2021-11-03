@@ -1,7 +1,6 @@
 package com.jennerdulce.taskmaster.adapters;
 
 import static com.jennerdulce.taskmaster.activities.MainActivity.TASK_ID_STRING;
-import static com.jennerdulce.taskmaster.activities.MainActivity.TASK_NAME_STRING;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.TaskItem;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.activities.TaskDetailActivity;
-import com.jennerdulce.taskmaster.models.TaskItem;
 
 import java.util.List;
 
@@ -41,11 +40,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         TaskItem taskItem = taskItemList.get(position);
         View taskItemFragment = holder.itemView;
         TextView currentItemFragmentTextView =   taskItemFragment.findViewById(R.id.currentItemFragmentTextView);
-        currentItemFragmentTextView.setText(taskItem.toString());
+        String taskItemString = "" + taskItem.getTaskName() + "\n" +
+                taskItem.getStatus();
+        currentItemFragmentTextView.setText(taskItemString);
 
         holder.itemView.setOnClickListener(view -> {
             Intent taskFragmentIntent = new Intent(associatedActivity, TaskDetailActivity.class);
-            taskFragmentIntent.putExtra(TASK_ID_STRING, taskItem.id);
+            taskFragmentIntent.putExtra(TASK_ID_STRING, taskItem.getId());
             associatedActivity.startActivity(taskFragmentIntent);
         });
     }

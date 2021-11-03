@@ -1,0 +1,13 @@
+type TaskItem @model {
+    id: ID!
+    taskName: String
+    body: String
+    status: String
+}
+
+enum StatusEnum {
+    NEW,
+    ASSIGNED,
+    IN_PROGRESS,
+    COMPLETE
+}
