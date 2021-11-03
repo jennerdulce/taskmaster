@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.amplifyframework:aws-datastore:1.28.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e2a463a07f7ed14954775cb4652873b1/transformed/jetified-aws-datastore-1.28.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e2a463a07f7ed14954775cb4652873b1/transformed/jetified-aws-datastore-1.28.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e2a463a07f7ed14954775cb4652873b1/transformed/jetified-aws-datastore-1.28.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amplifyframework/aws-datastore/1.28.1/2227b2fa13bd9f52126c9488b6f9537e4a4d3909/aws-datastore-1.28.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

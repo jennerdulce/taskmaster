@@ -1,27 +1,29 @@
 package com.jennerdulce.taskmaster.activities;
 
-import static com.jennerdulce.taskmaster.activities.MainActivity.DATABASE_INSTANCE_NAME;
+import static com.jennerdulce.taskmaster.activities.MainActivity.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
+import android.widget.TextView;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.TaskItem;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
-import com.jennerdulce.taskmaster.database.TaskmasterDatabase;
 import com.jennerdulce.taskmaster.models.StatusEnum;
-import com.jennerdulce.taskmaster.models.TaskItem;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddTaskActivity extends AppCompatActivity {
+    public final static String TAG = "jdd_taskmaster_add_task";
 
-    TaskmasterDatabase taskmasterDatabase;
     TaskRecyclerViewAdapter taskRecyclerViewAdapter;
 
     @Override
@@ -29,17 +31,11 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        taskmasterDatabase = Room.databaseBuilder(getApplicationContext(), TaskmasterDatabase.class, DATABASE_INSTANCE_NAME)
-                .allowMainThreadQueries()
-                .build();
-
-        Intent intent = getIntent();
-        long taskId = intent.getLongExtra(MainActivity.TASK_ID_STRING, -1);
+        TaskItem taskItem = null;
         Spinner taskStatusSpinner = findViewById(R.id.taskStatusSpinner);
-        taskStatusSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StatusEnum.values()));
-        TaskItem taskItem = taskmasterDatabase.taskItemDao().findById(taskId);
+        taskStatusSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StatusEnum.values()));;
         if(taskItem != null){
-            int spinnerPosition = getSpinnerIndex(taskStatusSpinner, taskItem.state.toString());
+            int spinnerPosition = getSpinnerIndex(taskStatusSpinner, taskItem.getStatus().toString());
             taskStatusSpinner.setSelection(spinnerPosition);
         }
 
@@ -51,12 +47,31 @@ public class AddTaskActivity extends AppCompatActivity {
             EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
             String taskNamePlainTextString = taskNameEditText.getText().toString();
             String taskBodyPlainTextString = taskDescriptionEditText.getText().toString();
-            TaskItem taskItem2 = new TaskItem(taskNamePlainTextString, taskBodyPlainTextString);
-            taskItem2.state = StatusEnum.valueOf(taskStatusSpinner.getSelectedItem().toString());
-            long newTaskId = taskmasterDatabase.taskItemDao().insert(taskItem2);
-            List<TaskItem> taskItemList2 = taskmasterDatabase.taskItemDao().findAll();
-            taskRecyclerViewAdapter.setTaskItemList(taskItemList2);
-            taskRecyclerViewAdapter.notifyDataSetChanged();
+
+            TaskItem taskItem2 = TaskItem.builder()
+                    .taskName(taskNamePlainTextString)
+                    .body(taskBodyPlainTextString)
+                    .status("NEW")
+                    .build();
+
+            Amplify.API.mutate(
+                    ModelMutation.create(taskItem2),
+                    success -> {
+                        Log.i(TAG, "Succeeded");
+                        List<TaskItem> taskList = taskRecyclerViewAdapter.getTaskList();
+                        taskList.add(taskItem2);
+                        taskRecyclerViewAdapter.setTaskItemList(taskList);
+                        taskRecyclerViewAdapter.notifyDataSetChanged();
+                    },
+                    failure -> Log.i(TAG, "Failed")
+            );
+
+//            TaskItem taskItem2 = new TaskItem(taskNamePlainTextString, taskBodyPlainTextString);
+//            taskItem2.state = StatusEnum.valueOf(taskStatusSpinner.getSelectedItem().toString());
+//            long newTaskId = taskmasterDatabase.taskItemDao().insert(taskItem2);
+            long newTaskId = 0;
+//            List<TaskItem> taskItemList2 = taskmasterDatabase.taskItemDao().findAll();
+
         });
     }
 

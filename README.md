@@ -69,26 +69,6 @@
   - In your MainActivity, create at least three hardcoded Task instances and use those to populate your RecyclerView/ViewAdapter.
 - Ensure that you can tap on any one of the Tasks in the RecyclerView, and it will appropriately launch the detail page with the correct Task title displayed.
 
-## LAB 29: Room
-
-### Feature Tasks
-
-#### Task Model and Room
-
-- Following the directions provided in the Android documentation, set up Room in your application, and modify your Task class to be an Entity.
-
-#### Add Task Form
-
-- Modify your Add Task form to save the data entered in as a Task in your local database.
-
-#### Homepage
-
-- Refactor your homepage’s RecyclerView to display all Task entities in your database.
-
-#### Detail Page
-
-- Ensure that the description and status of a tapped task are also displayed on the detail page, in addition to the title. (Note that you can accomplish this by passing along the entire Task entity, or by passing along only its ID in the intent.)
-
 ### Screenshots
 
 #### Task Detail Page
@@ -109,4 +89,43 @@
 
 #### Recycler View Task Page
 
-![Homepage](screenshots/taskListDisplay.png)
+![Homepage]
+
+## LAB 29: Room
+
+### Feature Tasks
+
+#### Task Model and Room
+
+- Following the directions provided in the Android documentation, set up Room in your application, and modify your Task class to be an Entity.
+
+#### Add Task Form
+
+- Modify your Add Task form to save the data entered in as a Task in your local database.
+
+#### Homepage
+
+- Refactor your homepage’s RecyclerView to display all Task entities in your database.
+
+#### Detail Page
+
+- Ensure that the description and status of a tapped task are also displayed on the detail page, in addition to the title. (Note that you can accomplish this by passing along the entire Task entity, or by passing along only its ID in the intent.)
+
+## LAB 32: Amplify and DynamoDB
+
+### Feature Tasks
+
+- Using the amplify add api command, create a Task resource that replicates our existing Task schema. Update all references to the Task data to instead use AWS Amplify to access your data in DynamoDB instead of in Room.
+
+#### Add Task Form
+
+- Modify your Add Task form to save the data entered in as a Task to DynamoDB.
+
+#### Homepage
+
+- Refactor your homepage’s RecyclerView to display all Task entities in DynamoDB.
+
+## Changelog
+
+- [11/2/2021] Removed rooms and implemented AWS Amplify and DynamoDB
+- [11/2/2021] Enum is not working at the moment

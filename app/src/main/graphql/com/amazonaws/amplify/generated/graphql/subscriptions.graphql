@@ -1,0 +1,40 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateTaskItem {
+  onCreateTaskItem {
+    id
+    taskName
+    body
+    status
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateTaskItem {
+  onUpdateTaskItem {
+    id
+    taskName
+    body
+    status
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteTaskItem {
+  onDeleteTaskItem {
+    id
+    taskName
+    body
+    status
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
