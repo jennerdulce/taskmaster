@@ -8,11 +8,23 @@ public enum StatusEnum {
 
     private final String statusString;
 
+    @Override
+    public String toString()
+    {
+        return statusString;
+    }
+
     StatusEnum(String statusString){
+
         this.statusString = statusString;
     }
 
-    public String getStatusString() {
-        return statusString;
+    public static StatusEnum fromString(String statusText) {
+        for (StatusEnum taskStatus : StatusEnum.values()) {
+            if (taskStatus.statusString.equalsIgnoreCase(statusText)) {
+                return taskStatus;
+            }
+        }
+        return null;
     }
 }

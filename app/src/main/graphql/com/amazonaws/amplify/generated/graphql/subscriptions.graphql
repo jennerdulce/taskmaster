@@ -2,9 +2,23 @@
 subscription OnCreateTaskItem {
   onCreateTaskItem {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -15,9 +29,23 @@ subscription OnCreateTaskItem {
 subscription OnUpdateTaskItem {
   onUpdateTaskItem {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -28,9 +56,104 @@ subscription OnUpdateTaskItem {
 subscription OnDeleteTaskItem {
   onDeleteTaskItem {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateAssignedTeam {
+  onCreateAssignedTeam {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateAssignedTeam {
+  onUpdateAssignedTeam {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteAssignedTeam {
+  onDeleteAssignedTeam {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt
