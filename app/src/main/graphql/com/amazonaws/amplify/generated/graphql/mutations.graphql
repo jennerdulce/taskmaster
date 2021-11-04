@@ -5,9 +5,23 @@ mutation CreateTaskItem(
 ) {
   createTaskItem(input: $input, condition: $condition) {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -21,9 +35,23 @@ mutation UpdateTaskItem(
 ) {
   updateTaskItem(input: $input, condition: $condition) {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -37,9 +65,113 @@ mutation DeleteTaskItem(
 ) {
   deleteTaskItem(input: $input, condition: $condition) {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateAssignedTeam(
+  $input: CreateAssignedTeamInput!
+  $condition: ModelAssignedTeamConditionInput
+) {
+  createAssignedTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateAssignedTeam(
+  $input: UpdateAssignedTeamInput!
+  $condition: ModelAssignedTeamConditionInput
+) {
+  updateAssignedTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteAssignedTeam(
+  $input: DeleteAssignedTeamInput!
+  $condition: ModelAssignedTeamConditionInput
+) {
+  deleteAssignedTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt

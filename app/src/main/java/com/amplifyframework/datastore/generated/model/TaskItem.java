@@ -1,5 +1,6 @@
 package com.amplifyframework.datastore.generated.model;
 
+import com.amplifyframework.core.model.annotations.BelongsTo;
 import com.amplifyframework.core.model.temporal.Temporal;
 
 import java.util.List;
@@ -19,15 +20,18 @@ import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 /** This is an auto generated class representing the TaskItem type in your schema. */
 @SuppressWarnings("all")
 @ModelConfig(pluralName = "TaskItems")
+@Index(name = "byOurTask", fields = {"assignedTeamId"})
 public final class TaskItem implements Model {
   public static final QueryField ID = field("TaskItem", "id");
   public static final QueryField TASK_NAME = field("TaskItem", "taskName");
   public static final QueryField BODY = field("TaskItem", "body");
   public static final QueryField STATUS = field("TaskItem", "status");
+  public static final QueryField ASSIGNED_TEAM = field("TaskItem", "assignedTeamId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String taskName;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="String") String status;
+  private final @ModelField(targetType="AssignedTeam", isRequired = true) @BelongsTo(targetName = "assignedTeamId", type = AssignedTeam.class) AssignedTeam assignedTeam;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
@@ -46,6 +50,10 @@ public final class TaskItem implements Model {
       return status;
   }
   
+  public AssignedTeam getAssignedTeam() {
+      return assignedTeam;
+  }
+  
   public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
@@ -54,11 +62,12 @@ public final class TaskItem implements Model {
       return updatedAt;
   }
   
-  private TaskItem(String id, String taskName, String body, String status) {
+  private TaskItem(String id, String taskName, String body, String status, AssignedTeam assignedTeam) {
     this.id = id;
     this.taskName = taskName;
     this.body = body;
     this.status = status;
+    this.assignedTeam = assignedTeam;
   }
   
   @Override
@@ -73,6 +82,7 @@ public final class TaskItem implements Model {
               ObjectsCompat.equals(getTaskName(), taskItem.getTaskName()) &&
               ObjectsCompat.equals(getBody(), taskItem.getBody()) &&
               ObjectsCompat.equals(getStatus(), taskItem.getStatus()) &&
+              ObjectsCompat.equals(getAssignedTeam(), taskItem.getAssignedTeam()) &&
               ObjectsCompat.equals(getCreatedAt(), taskItem.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), taskItem.getUpdatedAt());
       }
@@ -85,6 +95,7 @@ public final class TaskItem implements Model {
       .append(getTaskName())
       .append(getBody())
       .append(getStatus())
+      .append(getAssignedTeam())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .toString()
@@ -99,13 +110,14 @@ public final class TaskItem implements Model {
       .append("taskName=" + String.valueOf(getTaskName()) + ", ")
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
+      .append("assignedTeam=" + String.valueOf(getAssignedTeam()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
       .toString();
   }
   
-  public static BuildStep builder() {
+  public static AssignedTeamStep builder() {
       return new Builder();
   }
   
@@ -122,6 +134,7 @@ public final class TaskItem implements Model {
       id,
       null,
       null,
+      null,
       null
     );
   }
@@ -130,8 +143,14 @@ public final class TaskItem implements Model {
     return new CopyOfBuilder(id,
       taskName,
       body,
-      status);
+      status,
+      assignedTeam);
   }
+  public interface AssignedTeamStep {
+    BuildStep assignedTeam(AssignedTeam assignedTeam);
+  }
+  
+
   public interface BuildStep {
     TaskItem build();
     BuildStep id(String id);
@@ -141,8 +160,9 @@ public final class TaskItem implements Model {
   }
   
 
-  public static class Builder implements BuildStep {
+  public static class Builder implements AssignedTeamStep, BuildStep {
     private String id;
+    private AssignedTeam assignedTeam;
     private String taskName;
     private String body;
     private String status;
@@ -154,7 +174,15 @@ public final class TaskItem implements Model {
           id,
           taskName,
           body,
-          status);
+          status,
+          assignedTeam);
+    }
+    
+    @Override
+     public BuildStep assignedTeam(AssignedTeam assignedTeam) {
+        Objects.requireNonNull(assignedTeam);
+        this.assignedTeam = assignedTeam;
+        return this;
     }
     
     @Override
@@ -187,11 +215,17 @@ public final class TaskItem implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String taskName, String body, String status) {
+    private CopyOfBuilder(String id, String taskName, String body, String status, AssignedTeam assignedTeam) {
       super.id(id);
-      super.taskName(taskName)
+      super.assignedTeam(assignedTeam)
+        .taskName(taskName)
         .body(body)
         .status(status);
+    }
+    
+    @Override
+     public CopyOfBuilder assignedTeam(AssignedTeam assignedTeam) {
+      return (CopyOfBuilder) super.assignedTeam(assignedTeam);
     }
     
     @Override
