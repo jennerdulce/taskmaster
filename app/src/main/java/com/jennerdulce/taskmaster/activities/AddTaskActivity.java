@@ -35,29 +35,18 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        TaskItem taskItem = null;
+        // Select Spinner
         Spinner taskStatusSpinner = findViewById(R.id.taskStatusSpinner);
         Spinner teamSpinner = findViewById(R.id.teamSpinner);
+        // Put values into spinner
         taskStatusSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StatusEnum.values()));
-        if(taskItem != null){
-            int spinnerPosition = getSpinnerIndex(taskStatusSpinner, taskItem.getStatus().toString());
-            taskStatusSpinner.setSelection(spinnerPosition);
-        }
-        int taskStatusSpinnerChoice = taskStatusSpinner.getSelectedItemPosition();
-        taskStatusSpinnerChoice.set
+        // Default Selection for spinner
+        int spinnerPosition = getSpinnerIndex(taskStatusSpinner, StatusEnum.NEW_TASK.toString());
+        taskStatusSpinner.setSelection(spinnerPosition);
 
-        Button addTaskButton = (Button) findViewById(R.id.addTaskFormButton);
-        addTaskButton.setOnClickListener(view -> {
-//            TextView addTaskSubmitted = (TextView) findViewById(R.id.addTaskSubmittedTextView);
-//            addTaskSubmitted.setText("Submitted!");
-            EditText taskNameEditText = findViewById(R.id.myTaskPlainText);
-            EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
-            String taskNamePlainTextString = taskNameEditText.getText().toString();
-            String taskBodyPlainTextString = taskDescriptionEditText.getText().toString();
-
-            CompletableFuture<List<AssignedTeam>> assignedTeamCompletableFuture = new CompletableFuture<>();
-            List<AssignedTeam> teams = new ArrayList<>();
-            Amplify.API.query(
+        CompletableFuture<List<AssignedTeam>> assignedTeamCompletableFuture = new CompletableFuture<>();
+        List<AssignedTeam> teams = new ArrayList<>();
+        Amplify.API.query(
                     ModelQuery.list(AssignedTeam.class),
                     success -> {
                         if (success.hasData())
@@ -90,16 +79,38 @@ public class AddTaskActivity extends AppCompatActivity {
                 Log.i(TAG, "ExecutionException while getting assigned team:  " + ee.getMessage());
             }
 
-            // Select Team
-            teamSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listOfTeams));
-            int teamSpinnerPosition = teamSpinner.getItemIdAtPosition();
+            List<String> teamNames = new ArrayList<>();
 
+            for (AssignedTeam team : listOfTeams){
+                teamNames.add(team.getTeamName());
+            }
+
+            teamSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, teamNames));
+        List<AssignedTeam> listOfTeams2 = listOfTeams;
+
+        Button addTaskButton = (Button) findViewById(R.id.addTaskFormButton);
+        addTaskButton.setOnClickListener(view -> {
+//            TextView addTaskSubmitted = (TextView) findViewById(R.id.addTaskSubmittedTextView);
+//            addTaskSubmitted.setText("Submitted!");
+            String chosenStatus = StatusEnum.fromString(taskStatusSpinner.getSelectedItem().toString()).toString();
+            String chosenTeam = teamSpinner.getSelectedItem().toString();
+            AssignedTeam assignedTeam = null;
+            for (AssignedTeam team : listOfTeams2){
+                if(chosenTeam.equals(team.getTeamName())){
+                    assignedTeam = team;
+                }
+            }
+
+            EditText taskNameEditText = findViewById(R.id.myTaskPlainText);
+            EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
+            String taskNamePlainTextString = taskNameEditText.getText().toString();
+            String taskBodyPlainTextString = taskDescriptionEditText.getText().toString();
 
             TaskItem taskItem2 = TaskItem.builder()
-                    .assignedTeam(assignedTeamUnknown)
+                    .assignedTeam(assignedTeam)
                     .taskName(taskNamePlainTextString)
                     .body(taskBodyPlainTextString)
-                    .status(taskStatusSpinnerChoice)
+                    .status(chosenStatus)
                     .build();
 
             Amplify.API.mutate(
@@ -113,10 +124,6 @@ public class AddTaskActivity extends AppCompatActivity {
                     failure -> Log.i(TAG, "Failed")
             );
 
-//            TaskItem taskItem2 = new TaskItem(taskNamePlainTextString, taskBodyPlainTextString);
-//            taskItem2.state = StatusEnum.valueOf(taskStatusSpinner.getSelectedItem().toString());
-//            long newTaskId = taskmasterDatabase.taskItemDao().insert(taskItem2);
-            long newTaskId = 0;
         });
     }
 
