@@ -41,7 +41,8 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         View taskItemFragment = holder.itemView;
         TextView currentItemFragmentTextView =   taskItemFragment.findViewById(R.id.currentItemFragmentTextView);
         String taskItemString = "" + taskItem.getTaskName() + "\n" +
-                taskItem.getStatus();
+                "Status: " + taskItem.getStatus() + "\n" +
+                "Team: " + taskItem.getAssignedTeam().getTeamName();
         currentItemFragmentTextView.setText(taskItemString);
 
         holder.itemView.setOnClickListener(view -> {

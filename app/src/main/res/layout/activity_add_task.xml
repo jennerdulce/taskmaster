@@ -58,10 +58,10 @@
         android:text="@string/AddTaskBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
+        app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskStatusTextView"
-        app:layout_constraintVertical_bias="0.27" />
+        app:layout_constraintTop_toBottomOf="@+id/teamTitleTextView"
+        app:layout_constraintVertical_bias="0.156" />
 
     <TextView
         android:id="@+id/taskCountTextView"
@@ -109,7 +109,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.146"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
         app:layout_constraintVertical_bias="0.005" />
@@ -124,5 +124,30 @@
         app:layout_constraintStart_toEndOf="@+id/taskStatusTextView"
         app:layout_constraintTop_toBottomOf="@+id/taskDescriptionPlainText"
         app:layout_constraintVertical_bias="0.088" />
+
+    <TextView
+        android:id="@+id/teamTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/TeamTitle"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.097"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskStatusTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/teamSpinner"
+        android:layout_width="145dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintStart_toEndOf="@+id/teamTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/taskStatusSpinner"
+        app:layout_constraintVertical_bias="0.089" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

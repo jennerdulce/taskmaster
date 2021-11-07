@@ -13,9 +13,19 @@ query SyncTaskItems(
   ) {
     items {
       id
+      assignedTeamId
       taskName
       body
       status
+      assignedTeam {
+        id
+        teamName
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
       _version
       _deleted
       _lastChangedAt
@@ -29,9 +39,23 @@ query SyncTaskItems(
 query GetTaskItem($id: ID!) {
   getTaskItem(id: $id) {
     id
+    assignedTeamId
     taskName
     body
     status
+    assignedTeam {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -47,9 +71,98 @@ query ListTaskItems(
   listTaskItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      assignedTeamId
       taskName
       body
       status
+      assignedTeam {
+        id
+        teamName
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncAssignedTeams(
+  $filter: ModelAssignedTeamFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncAssignedTeams(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetAssignedTeam($id: ID!) {
+  getAssignedTeam(id: $id) {
+    id
+    teamName
+    taskItems {
+      items {
+        id
+        assignedTeamId
+        taskName
+        body
+        status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+query ListAssignedTeams(
+  $filter: ModelAssignedTeamFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAssignedTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      teamName
+      taskItems {
+        nextToken
+        startedAt
+      }
       _version
       _deleted
       _lastChangedAt

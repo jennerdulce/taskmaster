@@ -1,5 +1,6 @@
 package com.jennerdulce.taskmaster.activities;
 
+import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.TEAMNAME_KEY;
 import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAME_KEY;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.AssignedTeam;
 import com.amplifyframework.datastore.generated.model.TaskItem;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String TASK_NAME_STRING = "taskName";
     public final static String TASK_ID_STRING = "taskId";
     public final static String TAG = "jdd_taskmaster";
+    public final static String TEAM_UNKNOWN_NAME = "Team Unknown";
     protected static SharedPreferences sharedPreferences;
     protected static Resources res;
 
@@ -39,13 +42,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create Teams
+//        AssignedTeam assignedTeam1 = AssignedTeam.builder()
+//                .teamName("GOLD")
+//                .build();
+//        Amplify.API.mutate(
+//                ModelMutation.create(assignedTeam1),
+//                success -> Log.i(TAG, "Succeeded"),
+//                failure -> Log.i(TAG, "Failed")
+//        );
+//
+//        AssignedTeam assignedTeam2 = AssignedTeam.builder()
+//                .teamName("BLUE")
+//                .build();
+//        Amplify.API.mutate(
+//                ModelMutation.create(assignedTeam2),
+//                success -> Log.i(TAG, "Succeeded"),
+//                failure -> Log.i(TAG, "Failed")
+//        );
+//        AssignedTeam assignedTeam3 = AssignedTeam.builder()
+//                .teamName("RED")
+//                .build();
+//        Amplify.API.mutate(
+//                ModelMutation.create(assignedTeam3),
+//                success -> Log.i(TAG, "Succeeded"),
+//                failure -> Log.i(TAG, "Failed")
+//        );
+
         // Goes into DB and retrieves Items
         Amplify.API.query(
                 ModelQuery.list(TaskItem.class),
                 success -> {
                     List<TaskItem> taskItemList = new ArrayList<>();
-                    for (TaskItem taskItem : success.getData()){
-                        taskItemList.add(taskItem);
+                    String teamname = sharedPreferences.getString(TEAMNAME_KEY, "");
+                    if(success.hasData()){
+                        for (TaskItem taskItem : success.getData()){
+                            if(!teamname.equals("")) {
+                                if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
+                                    taskItemList.add(taskItem);
+                                }
+                            } else {
+                                taskItemList.add(taskItem);
+                            }
+                        }
                     }
                     runOnUiThread(() -> {
                         taskRecyclerViewAdapter.setTaskItemList(taskItemList);
@@ -96,13 +135,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
+        String teamname = sharedPreferences.getString(TEAMNAME_KEY, "");
         Amplify.API.query(
                 ModelQuery.list(TaskItem.class),
                 success -> {
                     List<TaskItem> taskItemList = new ArrayList<>();
-                    for (TaskItem taskItem : success.getData()){
-                        taskItemList.add(taskItem);
+                    if(success.hasData()){
+                        for (TaskItem taskItem : success.getData()){
+                            if(!teamname.equals("")) {
+                                if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
+                                    taskItemList.add(taskItem);
+                                }
+                            } else {
+                                taskItemList.add(taskItem);
+                            }
+                        }
                     }
                     runOnUiThread(() -> {
                         taskRecyclerViewAdapter.setTaskItemList(taskItemList);
@@ -119,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         if(!username.equals("")){
             // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
             ((TextView) findViewById(R.id.welcomeUsernameMessageTextView)).setText(res.getString(R.string.WelcomeUsername, username));
+        }
+        if(!teamname.equals("")){
+            // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
+            ((TextView) findViewById(R.id.mainPageTeamTextView)).setText(teamname);
         }
     }
 }
