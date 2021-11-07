@@ -90,8 +90,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         Button addTaskButton = (Button) findViewById(R.id.addTaskFormButton);
         addTaskButton.setOnClickListener(view -> {
-//            TextView addTaskSubmitted = (TextView) findViewById(R.id.addTaskSubmittedTextView);
-//            addTaskSubmitted.setText("Submitted!");
+            TextView addTaskSubmitted = (TextView) findViewById(R.id.addTaskSubmittedTextView);
+            addTaskSubmitted.setText("Submitted!");
             String chosenStatus = StatusEnum.fromString(taskStatusSpinner.getSelectedItem().toString()).toString();
             String chosenTeam = teamSpinner.getSelectedItem().toString();
             AssignedTeam assignedTeam = null;

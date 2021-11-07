@@ -1,5 +1,6 @@
 package com.jennerdulce.taskmaster.activities;
 
+import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.TEAMNAME_KEY;
 import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAME_KEY;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,9 +74,16 @@ public class MainActivity extends AppCompatActivity {
                 ModelQuery.list(TaskItem.class),
                 success -> {
                     List<TaskItem> taskItemList = new ArrayList<>();
+                    String teamname = sharedPreferences.getString(TEAMNAME_KEY, "");
                     if(success.hasData()){
                         for (TaskItem taskItem : success.getData()){
-                            taskItemList.add(taskItem);
+                            if(!teamname.equals("")) {
+                                if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
+                                    taskItemList.add(taskItem);
+                                }
+                            } else {
+                                taskItemList.add(taskItem);
+                            }
                         }
                     }
                     runOnUiThread(() -> {
@@ -127,14 +135,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
+        String teamname = sharedPreferences.getString(TEAMNAME_KEY, "");
         Amplify.API.query(
                 ModelQuery.list(TaskItem.class),
                 success -> {
                     List<TaskItem> taskItemList = new ArrayList<>();
                     if(success.hasData()){
                         for (TaskItem taskItem : success.getData()){
-                            taskItemList.add(taskItem);
+                            if(!teamname.equals("")) {
+                                if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
+                                    taskItemList.add(taskItem);
+                                }
+                            } else {
+                                taskItemList.add(taskItem);
+                            }
                         }
                     }
                     runOnUiThread(() -> {
@@ -152,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         if(!username.equals("")){
             // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
             ((TextView) findViewById(R.id.welcomeUsernameMessageTextView)).setText(res.getString(R.string.WelcomeUsername, username));
+        }
+        if(!teamname.equals("")){
+            // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
+            ((TextView) findViewById(R.id.mainPageTeamTextView)).setText(teamname);
         }
     }
 }

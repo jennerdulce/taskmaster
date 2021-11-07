@@ -46,7 +46,9 @@ public class TaskDetailActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         TextView taskDetailsHeader = findViewById(R.id.taskDetailsHeaderTextView);
                         TextView taskDetailsDescription = findViewById(R.id.taskDetailsDescTextView);
+                        TextView taskDetailsTeamTextView = findViewById(R.id.taskDetailsTeamTextView);
                         taskDetailsHeader.setText(taskItemInfo.getTaskName());
+                        taskDetailsTeamTextView.setText(taskItemInfo.getAssignedTeam().getTeamName());
                         taskDetailsDescription.setText(taskItemInfo.getBody());
                     });
                 },
