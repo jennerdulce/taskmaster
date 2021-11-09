@@ -125,7 +125,55 @@
 
 - Refactor your homepage’s RecyclerView to display all Task entities in DynamoDB.
 
+## LAB 33: Amplify and DynamoDB
+
+### Feature Tasks
+
+#### Tasks Are Owned By Teams
+
+-  Create a second entity for a team, which has a name and a list of tasks. Update your tasks to be owned by a team.
+- Manually create three teams by running a mutation exactly three times in your code. (You do NOT need to allow the user to create new teams.)
+
+#### Add Task Form
+
+- Modify your Add Task form to include either a Spinner or Radio Buttons for which team that task belongs to.
+
+#### Settings Page
+
+- In addition to a username, allow the user to choose their team on the Settings page. Use that Team to display only that team’s tasks on the homepage.
+
+## LAB 34: Publishing to the Play Store
+
+### Feature Tasks
+
+#### App Polish
+
+- Ensure that your application follows Google’s guidelines.
+
+#### Build Final APK
+
+- Build an APK for your application. Include that APK in your GitHub repo.
+
+## LAB 36: Publishing to the Play Store
+
+### Feature Tasks
+
+#### User Login
+
+- Add Cognito to your Amplify setup. Add in user login and sign up flows to your application, using Cognito’s pre-built UI as appropriate. Display the logged in user’s username somewhere relevant in your app.
+
+#### User Logout
+
+- Allow users to log out of your application.
+
+
 ## Changelog
 
 - [11/2/2021] Removed rooms and implemented AWS Amplify and DynamoDB
 - [11/2/2021] Enum is not working at the moment
+- [11/3/2021] Enum is working
+- [11/3/2021] Implemented a 'Team' model to database / rooms to create relationships between 'Task Item' and 'Team'
+- [11/3/2021] Added spinners for team selection and task status
+- [11/3/2021] Added spinner for the Settings Page to filter through and display tasks of the selected Team
+- [11/8/2021] Added auth via Cognito
+- [11/8/2021] Features implemented: Sign in, Sign up, Logout, Verify

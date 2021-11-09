@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.AssignedTeam;
 import com.amplifyframework.datastore.generated.model.TaskItem;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public final static String TASK_NAME_STRING = "taskName";
     public final static String TASK_ID_STRING = "taskId";
     public final static String TAG = "jdd_taskmaster";
     public final static String TEAM_UNKNOWN_NAME = "Team Unknown";
@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
 //                success -> Log.i(TAG, "Succeeded"),
 //                failure -> Log.i(TAG, "Failed")
 //        );
+
+        AuthUser currentUser = Amplify.Auth.getCurrentUser();
+        if(currentUser == null){
+            Intent loginActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginActivityIntent);
+        }
 
         // Goes into DB and retrieves Items
         Amplify.API.query(
@@ -129,6 +135,24 @@ public class MainActivity extends AppCompatActivity {
             Intent userSettingsIntent = new Intent(MainActivity.this, UserSettingsActivity.class);
             startActivity(userSettingsIntent);
         });
+
+        // Signup Button
+        Button mainSignUpButton = (Button) findViewById(R.id.mainSignUpButton);
+        mainSignUpButton.setOnClickListener(view -> {
+            Intent signUpActivityIntent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(signUpActivityIntent);
+        });
+
+        // Logout Button
+        Button mainLogoutButton = (Button) findViewById(R.id.mainLogoutButton);
+        mainLogoutButton.setOnClickListener(view -> {
+            Amplify.Auth.signOut(
+                    ()-> {Log.i(TAG, "Logout succeeded!");},
+                    failure -> {Log.i(TAG, "Logout failed: " + failure.toString());}
+            );
+            Intent loginActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginActivityIntent);
+        });
     }
 
     // onResume lifecycle
@@ -161,7 +185,14 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        String username = sharedPreferences.getString(USERNAME_KEY, "");
+        String username = "";
+        AuthUser currentUser = Amplify.Auth.getCurrentUser();  // TODO: Use actual nickname here instead
+        if (currentUser != null)
+        {
+            username = currentUser.getUsername();
+        }
+
+//        String username = sharedPreferences.getString(USERNAME_KEY, "");
 
         if(!username.equals("")){
             // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
