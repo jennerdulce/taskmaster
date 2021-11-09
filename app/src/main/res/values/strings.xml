@@ -24,4 +24,16 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="TaskStatus">Status</string>
     <string name="TeamTitle">Team</string>
+    <string name="SignUp">Sign Up</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="EnterUsername">Email Address</string>
+    <string name="EnterPassword">Enter Password</string>
+    <string name="SubmitInfo">Submit</string>
+    <string name="VerifyEmail">Verify Email</string>
+    <string name="VerificationCode">Verification Code</string>
+    <string name="Code">######</string>
+    <string name="Login">Log In</string>
+    <string name="LoginButton">Log In</string>
+    <string name="LogoutButton">Logout</string>
 </resources>

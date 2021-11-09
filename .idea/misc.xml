@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_add_task.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2462962962962963" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_sign_up_verify.xml" value="0.2462962962962963" />
         <entry key="app/src/main/res/layout/activity_task_detail.xml" value="0.45" />
         <entry key="app/src/main/res/layout/activity_user_settings.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_task_item.xml" value="0.45" />

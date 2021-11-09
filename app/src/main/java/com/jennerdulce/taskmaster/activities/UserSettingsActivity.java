@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.AssignedTeam;
 import com.jennerdulce.taskmaster.R;
@@ -37,12 +38,21 @@ public class UserSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferencesEditor = sharedPreferences.edit();
+    // Retrieves uername from logged in user
+        String username = "";
+        AuthUser currentUser = Amplify.Auth.getCurrentUser();  // TODO: Use actual nickname here instead
+        if (currentUser != null)
+        {
+            username = currentUser.getUsername();
+        }
+
+//        Locally retrieves username
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        sharedPreferencesEditor = sharedPreferences.edit();
+//        String username = sharedPreferences.getString(USERNAME_KEY, "");
 
         // Accesses stored values and sets the value for the PlainText
         EditText usernameInputText = findViewById(R.id.usernameInputPlainText);
-        String username = sharedPreferences.getString(USERNAME_KEY, "");
         usernameInputText.setText(username);
 
         Spinner teamSpinner = findViewById(R.id.taskDetailTeamSpinner);
