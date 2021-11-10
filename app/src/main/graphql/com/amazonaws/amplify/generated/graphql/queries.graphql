@@ -26,6 +26,7 @@ query SyncTaskItems(
         createdAt
         updatedAt
       }
+      taskImageKey
       _version
       _deleted
       _lastChangedAt
@@ -56,6 +57,7 @@ query GetTaskItem($id: ID!) {
       createdAt
       updatedAt
     }
+    taskImageKey
     _version
     _deleted
     _lastChangedAt
@@ -84,6 +86,7 @@ query ListTaskItems(
         createdAt
         updatedAt
       }
+      taskImageKey
       _version
       _deleted
       _lastChangedAt
@@ -134,6 +137,7 @@ query GetAssignedTeam($id: ID!) {
         taskName
         body
         status
+        taskImageKey
         _version
         _deleted
         _lastChangedAt

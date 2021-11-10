@@ -20,15 +20,15 @@
         app:layout_constraintVertical_bias="0.09" />
 
     <EditText
-        android:id="@+id/myTaskPlainText"
+        android:id="@+id/myTaskEditText"
         android:layout_width="367dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="68dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:hint="@string/MyTaskInput"
         android:inputType="textPersonName"
-        android:text="@string/MyTaskInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.285"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,13 +42,13 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:hint="@string/TaskDescriptionInput"
         android:inputType="textPersonName"
-        android:text="@string/TaskDescriptionInput"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myTaskPlainText"
+        app:layout_constraintTop_toBottomOf="@+id/myTaskEditText"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -58,10 +58,10 @@
         android:text="@string/AddTaskBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teamTitleTextView"
-        app:layout_constraintVertical_bias="0.156" />
+        app:layout_constraintTop_toBottomOf="@+id/addTaskUploadImageButton"
+        app:layout_constraintVertical_bias="0.139" />
 
     <TextView
         android:id="@+id/taskCountTextView"
@@ -149,5 +149,15 @@
         app:layout_constraintStart_toEndOf="@+id/teamTitleTextView"
         app:layout_constraintTop_toBottomOf="@+id/taskStatusSpinner"
         app:layout_constraintVertical_bias="0.089" />
+
+    <Button
+        android:id="@+id/addTaskUploadImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/UploadImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teamTitleTextView"
+        app:layout_constraintVertical_bias="0.149"
+        tools:layout_editor_absoluteX="32dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

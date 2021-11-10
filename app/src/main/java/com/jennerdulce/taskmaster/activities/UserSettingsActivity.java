@@ -47,16 +47,14 @@ public class UserSettingsActivity extends AppCompatActivity {
         }
 
 //        Locally retrieves username
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferencesEditor = sharedPreferences.edit();
 //        String username = sharedPreferences.getString(USERNAME_KEY, "");
 
         // Accesses stored values and sets the value for the PlainText
         EditText usernameInputText = findViewById(R.id.usernameInputPlainText);
         usernameInputText.setText(username);
-
         Spinner teamSpinner = findViewById(R.id.taskDetailTeamSpinner);
-
         CompletableFuture<List<AssignedTeam>> assignedTeamCompletableFuture = new CompletableFuture<>();
         List<AssignedTeam> teams = new ArrayList<>();
 
@@ -112,8 +110,8 @@ public class UserSettingsActivity extends AppCompatActivity {
                 }
             }
 
-            String changeUsername = usernameInputText.getText().toString();
-            sharedPreferencesEditor.putString(USERNAME_KEY, changeUsername);
+//            String changeUsername = usernameInputText.getText().toString();
+//            sharedPreferencesEditor.putString(USERNAME_KEY, changeUsername);
             sharedPreferencesEditor.putString(TEAMNAME_KEY, assignedTeam.getTeamName());
             sharedPreferencesEditor.apply();
         });

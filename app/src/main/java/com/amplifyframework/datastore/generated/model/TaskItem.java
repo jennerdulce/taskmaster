@@ -27,11 +27,13 @@ public final class TaskItem implements Model {
   public static final QueryField BODY = field("TaskItem", "body");
   public static final QueryField STATUS = field("TaskItem", "status");
   public static final QueryField ASSIGNED_TEAM = field("TaskItem", "assignedTeamId");
+  public static final QueryField TASK_IMAGE_KEY = field("TaskItem", "taskImageKey");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String taskName;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="String") String status;
   private final @ModelField(targetType="AssignedTeam", isRequired = true) @BelongsTo(targetName = "assignedTeamId", type = AssignedTeam.class) AssignedTeam assignedTeam;
+  private final @ModelField(targetType="String") String taskImageKey;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
@@ -54,6 +56,10 @@ public final class TaskItem implements Model {
       return assignedTeam;
   }
   
+  public String getTaskImageKey() {
+      return taskImageKey;
+  }
+  
   public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
@@ -62,12 +68,13 @@ public final class TaskItem implements Model {
       return updatedAt;
   }
   
-  private TaskItem(String id, String taskName, String body, String status, AssignedTeam assignedTeam) {
+  private TaskItem(String id, String taskName, String body, String status, AssignedTeam assignedTeam, String taskImageKey) {
     this.id = id;
     this.taskName = taskName;
     this.body = body;
     this.status = status;
     this.assignedTeam = assignedTeam;
+    this.taskImageKey = taskImageKey;
   }
   
   @Override
@@ -83,6 +90,7 @@ public final class TaskItem implements Model {
               ObjectsCompat.equals(getBody(), taskItem.getBody()) &&
               ObjectsCompat.equals(getStatus(), taskItem.getStatus()) &&
               ObjectsCompat.equals(getAssignedTeam(), taskItem.getAssignedTeam()) &&
+              ObjectsCompat.equals(getTaskImageKey(), taskItem.getTaskImageKey()) &&
               ObjectsCompat.equals(getCreatedAt(), taskItem.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), taskItem.getUpdatedAt());
       }
@@ -96,6 +104,7 @@ public final class TaskItem implements Model {
       .append(getBody())
       .append(getStatus())
       .append(getAssignedTeam())
+      .append(getTaskImageKey())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .toString()
@@ -111,6 +120,7 @@ public final class TaskItem implements Model {
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
       .append("assignedTeam=" + String.valueOf(getAssignedTeam()) + ", ")
+      .append("taskImageKey=" + String.valueOf(getTaskImageKey()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
@@ -135,6 +145,7 @@ public final class TaskItem implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -144,7 +155,8 @@ public final class TaskItem implements Model {
       taskName,
       body,
       status,
-      assignedTeam);
+      assignedTeam,
+      taskImageKey);
   }
   public interface AssignedTeamStep {
     BuildStep assignedTeam(AssignedTeam assignedTeam);
@@ -157,6 +169,7 @@ public final class TaskItem implements Model {
     BuildStep taskName(String taskName);
     BuildStep body(String body);
     BuildStep status(String status);
+    BuildStep taskImageKey(String taskImageKey);
   }
   
 
@@ -166,6 +179,7 @@ public final class TaskItem implements Model {
     private String taskName;
     private String body;
     private String status;
+    private String taskImageKey;
     @Override
      public TaskItem build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -175,7 +189,8 @@ public final class TaskItem implements Model {
           taskName,
           body,
           status,
-          assignedTeam);
+          assignedTeam,
+          taskImageKey);
     }
     
     @Override
@@ -203,6 +218,12 @@ public final class TaskItem implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep taskImageKey(String taskImageKey) {
+        this.taskImageKey = taskImageKey;
+        return this;
+    }
+    
     /** 
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -215,12 +236,13 @@ public final class TaskItem implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String taskName, String body, String status, AssignedTeam assignedTeam) {
+    private CopyOfBuilder(String id, String taskName, String body, String status, AssignedTeam assignedTeam, String taskImageKey) {
       super.id(id);
       super.assignedTeam(assignedTeam)
         .taskName(taskName)
         .body(body)
-        .status(status);
+        .status(status)
+        .taskImageKey(taskImageKey);
     }
     
     @Override
@@ -241,6 +263,11 @@ public final class TaskItem implements Model {
     @Override
      public CopyOfBuilder status(String status) {
       return (CopyOfBuilder) super.status(status);
+    }
+    
+    @Override
+     public CopyOfBuilder taskImageKey(String taskImageKey) {
+      return (CopyOfBuilder) super.taskImageKey(taskImageKey);
     }
   }
   

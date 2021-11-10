@@ -1,5 +1,9 @@
 # Taskmaster
 
+## APK
+
+- [APP APK](app-debug.apk)
+
 ## LAB 26: Beginning TaskMaster
 
 ### Featured Tasks
@@ -89,7 +93,7 @@
 
 #### Recycler View Task Page
 
-![Homepage]
+![Homepage](screenshots/home.png)
 
 ## LAB 29: Room
 
@@ -142,6 +146,16 @@
 
 - In addition to a username, allow the user to choose their team on the Settings page. Use that Team to display only that team’s tasks on the homepage.
 
+### Screenshots
+
+#### Add Task Team
+
+![Add Task](screenshots/addTaskTeam.png)
+
+#### Settings
+
+![Settings](screenshots/settingsTeam.png)
+
 ## LAB 34: Publishing to the Play Store
 
 ### Feature Tasks
@@ -166,6 +180,41 @@
 
 - Allow users to log out of your application.
 
+### Screenshots
+
+#### Login
+
+![Login](screenshots/loginActivity.png)
+
+#### Signup
+
+![Signup](screenshots/signupActivity.png)
+
+#### Verify Activity
+
+![Verify Activity](screenshots/verifyActivity.png)
+
+#### Username Display
+
+![Username Display](screenshots/usernameDisplay.png)
+
+## LAB 37: S3
+
+### Uploads
+
+#### User Login
+
+- On the “Add a Task” activity, allow users to optionally select a file to attach to that task. If a user attaches a file to a task, that file should be uploaded to S3, and associated with that task.
+
+#### Displaying Files
+
+- On the Task detail activity, if there is a file that is an image associated with a particular Task, that image should be displayed within that activity. (If the file is any other type, you should display a link to it.)
+
+### Screenshots
+
+#### Task Detail
+
+![Task Detail image](screenshots/s3uploadimage.png)
 
 ## Changelog
 
@@ -177,3 +226,6 @@
 - [11/3/2021] Added spinner for the Settings Page to filter through and display tasks of the selected Team
 - [11/8/2021] Added auth via Cognito
 - [11/8/2021] Features implemented: Sign in, Sign up, Logout, Verify
+- [11/9/2021] Implemented selction with Andriod file picker
+- [11/9/2021] Implemented ability to upload selected image to s3 bucket after choosing saving task
+- [11/9/2021] Image is displayed on the task detail activity
