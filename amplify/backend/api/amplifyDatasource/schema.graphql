@@ -6,6 +6,7 @@ type TaskItem @model
     body: String
     status: String
     assignedTeam: AssignedTeam! @connection(fields: ["assignedTeamId"])
+    taskImageKey: String
 }
 
 type AssignedTeam @model{

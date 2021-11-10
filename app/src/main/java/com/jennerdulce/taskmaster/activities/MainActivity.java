@@ -25,6 +25,10 @@ import com.amplifyframework.datastore.generated.model.TaskItem;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,33 +45,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Create Teams
-//        AssignedTeam assignedTeam1 = AssignedTeam.builder()
-//                .teamName("GOLD")
-//                .build();
-//        Amplify.API.mutate(
-//                ModelMutation.create(assignedTeam1),
-//                success -> Log.i(TAG, "Succeeded"),
-//                failure -> Log.i(TAG, "Failed")
-//        );
-//
-//        AssignedTeam assignedTeam2 = AssignedTeam.builder()
-//                .teamName("BLUE")
-//                .build();
-//        Amplify.API.mutate(
-//                ModelMutation.create(assignedTeam2),
-//                success -> Log.i(TAG, "Succeeded"),
-//                failure -> Log.i(TAG, "Failed")
-//        );
-//        AssignedTeam assignedTeam3 = AssignedTeam.builder()
-//                .teamName("RED")
-//                .build();
-//        Amplify.API.mutate(
-//                ModelMutation.create(assignedTeam3),
-//                success -> Log.i(TAG, "Succeeded"),
-//                failure -> Log.i(TAG, "Failed")
-//        );
 
         AuthUser currentUser = Amplify.Auth.getCurrentUser();
         if(currentUser == null){
@@ -87,14 +64,12 @@ public class MainActivity extends AppCompatActivity {
                                 if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
                                     taskItemList.add(taskItem);
                                 }
-                            } else {
-                                taskItemList.add(taskItem);
                             }
                         }
                     }
                     runOnUiThread(() -> {
+                        ((TextView) findViewById(R.id.mainPageTeamTextView)).setText(teamname);
                         taskRecyclerViewAdapter.setTaskItemList(taskItemList);
-                        taskRecyclerViewAdapter.notifyDataSetChanged();
                     });
                 },
                 failure -> {
@@ -170,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
                                 if (taskItem.getAssignedTeam().getTeamName().equals(teamname)) {
                                     taskItemList.add(taskItem);
                                 }
-                            } else {
-                                taskItemList.add(taskItem);
                             }
                         }
                     }
@@ -184,20 +157,17 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Failed");
                 }
         );
-
         String username = "";
         AuthUser currentUser = Amplify.Auth.getCurrentUser();  // TODO: Use actual nickname here instead
-        if (currentUser != null)
-        {
+        if (currentUser != null) {
             username = currentUser.getUsername();
         }
-
 //        String username = sharedPreferences.getString(USERNAME_KEY, "");
-
         if(!username.equals("")){
             // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
             ((TextView) findViewById(R.id.welcomeUsernameMessageTextView)).setText(res.getString(R.string.WelcomeUsername, username));
         }
+
         if(!teamname.equals("")){
             // This line finds the saved String ID from the strings.xml file and instantiate at the '%1$s' at the second parameter
             ((TextView) findViewById(R.id.mainPageTeamTextView)).setText(teamname);

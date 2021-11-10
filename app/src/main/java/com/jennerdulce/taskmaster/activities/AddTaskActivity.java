@@ -1,11 +1,18 @@
 package com.jennerdulce.taskmaster.activities;
 
-import static com.jennerdulce.taskmaster.activities.MainActivity.TAG;
-import static com.jennerdulce.taskmaster.activities.MainActivity.TEAM_UNKNOWN_NAME;
-
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +27,9 @@ import com.amplifyframework.datastore.generated.model.TaskItem;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
 import com.jennerdulce.taskmaster.models.StatusEnum;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,21 +39,38 @@ public class AddTaskActivity extends AppCompatActivity {
     public final static String TAG = "jdd_taskmaster_add_task";
 
     TaskRecyclerViewAdapter taskRecyclerViewAdapter;
+    ActivityResultLauncher<Intent> activityResultLauncher;
+    AssignedTeam assignedTeam = null;
+    String chosenStatus = null;
+    String chosenTeam = null;
+    String taskNamePlainTextString = null;
+    String taskBodyPlainTextString = null;
+    String awsImageKey = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+        EditText taskNameEditText = findViewById(R.id.myTaskEditText);
+        EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
+
+        // Needed here
+        activityResultLauncher = getImagePickingActivityResultLauncher();
+
         // Select Spinner
         Spinner taskStatusSpinner = findViewById(R.id.taskStatusSpinner);
         Spinner teamSpinner = findViewById(R.id.teamSpinner);
+
         // Put values into spinner
         taskStatusSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StatusEnum.values()));
+
         // Default Selection for spinner
         int spinnerPosition = getSpinnerIndex(taskStatusSpinner, StatusEnum.NEW_TASK.toString());
         taskStatusSpinner.setSelection(spinnerPosition);
 
+        // Retrieve list of teams for Team spinner
         CompletableFuture<List<AssignedTeam>> assignedTeamCompletableFuture = new CompletableFuture<>();
         List<AssignedTeam> teams = new ArrayList<>();
         Amplify.API.query(
@@ -81,6 +108,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
             List<String> teamNames = new ArrayList<>();
 
+            // Retrieves Team name as strings
             for (AssignedTeam team : listOfTeams){
                 teamNames.add(team.getTeamName());
             }
@@ -92,39 +120,102 @@ public class AddTaskActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(view -> {
             TextView addTaskSubmitted = (TextView) findViewById(R.id.addTaskSubmittedTextView);
             addTaskSubmitted.setText("Submitted!");
-            String chosenStatus = StatusEnum.fromString(taskStatusSpinner.getSelectedItem().toString()).toString();
-            String chosenTeam = teamSpinner.getSelectedItem().toString();
-            AssignedTeam assignedTeam = null;
+            chosenStatus = StatusEnum.fromString(taskStatusSpinner.getSelectedItem().toString()).toString();
+            chosenTeam = teamSpinner.getSelectedItem().toString();
+            taskNamePlainTextString = taskNameEditText.getText().toString();
+            taskBodyPlainTextString = taskDescriptionEditText.getText().toString();
+
             for (AssignedTeam team : listOfTeams2){
                 if(chosenTeam.equals(team.getTeamName())){
                     assignedTeam = team;
                 }
             }
-
-            EditText taskNameEditText = findViewById(R.id.myTaskPlainText);
-            EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
-            String taskNamePlainTextString = taskNameEditText.getText().toString();
-            String taskBodyPlainTextString = taskDescriptionEditText.getText().toString();
-
-            TaskItem taskItem2 = TaskItem.builder()
-                    .assignedTeam(assignedTeam)
-                    .taskName(taskNamePlainTextString)
-                    .body(taskBodyPlainTextString)
-                    .status(chosenStatus)
-                    .build();
-
-            Amplify.API.mutate(
-                    ModelMutation.create(taskItem2),
-                    success -> {
-                        Log.i(TAG, "Succeeded");
-                        List<TaskItem> taskList = taskRecyclerViewAdapter.getTaskList();
-                        taskList.add(taskItem2);
-                        taskRecyclerViewAdapter.notifyDataSetChanged();
-                    },
-                    failure -> Log.i(TAG, "Failed")
-            );
-
+            saveTaskItemToDb();
         });
+
+        Button addTaskUploadImageButton = (Button) findViewById(R.id.addTaskUploadImageButton);
+        addTaskUploadImageButton.setOnClickListener(view -> {
+            selectFileAndSaveToS3();
+        });
+    }
+
+    protected void saveTaskItemToDb(){
+        TaskItem taskItem2 = TaskItem.builder()
+                .assignedTeam(assignedTeam)
+                .taskName(taskNamePlainTextString)
+                .body(taskBodyPlainTextString)
+                .status(chosenStatus)
+                .taskImageKey(awsImageKey)
+                .build();
+
+        Amplify.API.mutate(
+                ModelMutation.create(taskItem2),
+                success -> {
+                    Log.i(TAG, "Succeeded");
+                },
+                failure -> Log.i(TAG, "Failed")
+        );
+    }
+
+    protected void selectFileAndSaveToS3(){
+        // Grab file from filepicker
+        Intent imageFilePickIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        imageFilePickIntent.setType("*/*"); // Allows one kind of category of file
+        // Restrictions
+        imageFilePickIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpg", "image/png"});
+        // Brings you to photos app on your phone
+//        ActivityResultLauncher<Intent> activityResultLauncher = getImagePickingActivityResultLauncher();
+        activityResultLauncher.launch(imageFilePickIntent);
+    }
+
+    protected ActivityResultLauncher<Intent> getImagePickingActivityResultLauncher(){
+        ActivityResultLauncher<Intent> imagePickingActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>()
+                {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        // Check to see if result is okay and start processing
+                        if(result.getResultCode() == Activity.RESULT_OK){
+                            if(result.getData() != null){ // returns an intent
+                                Uri pickedImageFileUri = result.getData().getData();
+                                try {
+                                    InputStream pickedImageInputStream = getContentResolver().openInputStream(pickedImageFileUri);
+                                    String pickedImageFilename = getFilenameFromUri(pickedImageFileUri);;
+                                    Log.i(TAG, "Succeeded in getting input stream from file on phone! Filename is: " + pickedImageFilename);
+                                    uploadInputStreamToS3(pickedImageInputStream, pickedImageFilename);
+                                } catch (FileNotFoundException fnfe){
+                                    Log.e(TAG, "File not found File picker: " + fnfe.getMessage(), fnfe);
+                                }
+                            }
+                        }
+                    }
+                }
+        );
+        return imagePickingActivityResultLauncher;
+    }
+
+    // Make getFilenameFromUri Method
+    @SuppressLint("Range")
+    protected String getFilenameFromUri(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null))
+            {
+                if (cursor != null && cursor.moveToFirst())
+                {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     private int getSpinnerIndex(Spinner spinner, String stringValueToCheck){
@@ -134,5 +225,19 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         }
         return 0;
+    }
+
+    protected void uploadInputStreamToS3(InputStream pickedImageFileInputStream, String pickedImageFilename){
+        Amplify.Storage.uploadInputStream(
+                pickedImageFilename,
+                pickedImageFileInputStream,
+                success -> {
+                    Log.i(TAG, "Succeeded in getting uploaded file to S3. Key is: " + success.getKey());
+                    awsImageKey = success.getKey();
+                },
+                failure -> {
+                    Log.e(TAG, "Failed in getting uploaded file to S3. Key is: " + pickedImageFilename + " with error: " + failure.getMessage(), failure);
+                }
+        );
     }
 }
