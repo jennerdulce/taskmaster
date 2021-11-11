@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -17,8 +18,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -38,6 +42,7 @@ import java.util.concurrent.ExecutionException;
 public class AddTaskActivity extends AppCompatActivity {
     public final static String TAG = "jdd_taskmaster_add_task";
 
+    // For creating new task
     TaskRecyclerViewAdapter taskRecyclerViewAdapter;
     ActivityResultLauncher<Intent> activityResultLauncher;
     AssignedTeam assignedTeam = null;
@@ -46,6 +51,11 @@ public class AddTaskActivity extends AppCompatActivity {
     String taskNamePlainTextString = null;
     String taskBodyPlainTextString = null;
     String awsImageKey = null;
+    InputStream pickedImageInputStream = null;
+
+    // For image picker
+    Uri pickedImageFileUri;
+    String pickedImageFilename;
 
 
     @Override
@@ -53,11 +63,28 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        EditText taskNameEditText = findViewById(R.id.myTaskEditText);
-        EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
-
         // Needed here
         activityResultLauncher = getImagePickingActivityResultLauncher();
+
+        // Explicit intent (share)
+        Intent intent = getIntent();
+        if((intent.getType() != null) && (intent.getType().startsWith("image/"))){
+            Uri incomingFileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (incomingFileUri != null){
+                try{
+                    pickedImageFileUri = incomingFileUri;
+                    pickedImageFilename = getFilenameFromUri(incomingFileUri);
+                    InputStream incomingImageFileInputStream = getContentResolver().openInputStream(incomingFileUri);
+                    ImageView previewShareImageView = findViewById(R.id.previewShareImageView);
+                    previewShareImageView.setImageBitmap(BitmapFactory.decodeStream(incomingImageFileInputStream));
+                } catch (FileNotFoundException fnfe){
+                    Log.e(TAG, "Could not get file from file picker! " + fnfe.getMessage(), fnfe);
+                }
+            }
+        }
+
+        EditText taskNameEditText = findViewById(R.id.myTaskEditText);
+        EditText taskDescriptionEditText = findViewById(R.id.taskDescriptionPlainText);
 
         // Select Spinner
         Spinner taskStatusSpinner = findViewById(R.id.taskStatusSpinner);
@@ -130,13 +157,25 @@ public class AddTaskActivity extends AppCompatActivity {
                     assignedTeam = team;
                 }
             }
-            saveTaskItemToDb();
+            saveToS3AndDatabase();
         });
 
         Button addTaskUploadImageButton = (Button) findViewById(R.id.addTaskUploadImageButton);
         addTaskUploadImageButton.setOnClickListener(view -> {
-            selectFileAndSaveToS3();
+            selectImage();
         });
+    }
+
+    protected void saveToDbOnly(){
+
+    }
+
+    protected void selectImage(){
+        // Grab file from filepicker
+        Intent imageFilePickIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        imageFilePickIntent.setType("*/*"); // Allows one kind of category of file
+        imageFilePickIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpg", "image/png"});
+        activityResultLauncher.launch(imageFilePickIntent);
     }
 
     protected void saveTaskItemToDb(){
@@ -157,15 +196,35 @@ public class AddTaskActivity extends AppCompatActivity {
         );
     }
 
-    protected void selectFileAndSaveToS3(){
-        // Grab file from filepicker
-        Intent imageFilePickIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        imageFilePickIntent.setType("*/*"); // Allows one kind of category of file
-        // Restrictions
-        imageFilePickIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpg", "image/png"});
-        // Brings you to photos app on your phone
-//        ActivityResultLauncher<Intent> activityResultLauncher = getImagePickingActivityResultLauncher();
-        activityResultLauncher.launch(imageFilePickIntent);
+    protected void saveToS3AndDatabase(){
+        if(pickedImageFilename == null){
+            runOnUiThread(() -> {
+                Toast.makeText(AddTaskActivity.this, "Please select a file before submitting!", Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            InputStream pickedImageInputStream = null;
+            try {
+                pickedImageInputStream = getContentResolver().openInputStream(pickedImageFileUri);
+            } catch (FileNotFoundException fnfe){
+                Log.e(TAG, "Could not get input stream from preview image! " + fnfe.getMessage(), fnfe);
+            }
+            uploadInputStreamToS3(pickedImageInputStream, pickedImageFilename);
+        }
+    }
+
+    protected void uploadInputStreamToS3(InputStream pickedImageFileInputStream, String pickedImageFilename){
+        Amplify.Storage.uploadInputStream(
+                pickedImageFilename,
+                pickedImageFileInputStream,
+                success -> {
+                    Log.i(TAG, "Succeeded in getting uploaded file to S3. Key is: " + success.getKey());
+                    awsImageKey = success.getKey();
+                    saveTaskItemToDb();
+                },
+                failure -> {
+                    Log.e(TAG, "Failed in getting uploaded file to S3. Key is: " + pickedImageFilename + " with error: " + failure.getMessage(), failure);
+                }
+        );
     }
 
     protected ActivityResultLauncher<Intent> getImagePickingActivityResultLauncher(){
@@ -178,12 +237,16 @@ public class AddTaskActivity extends AppCompatActivity {
                         // Check to see if result is okay and start processing
                         if(result.getResultCode() == Activity.RESULT_OK){
                             if(result.getData() != null){ // returns an intent
-                                Uri pickedImageFileUri = result.getData().getData();
+                                pickedImageFileUri = result.getData().getData();
                                 try {
+                                    pickedImageFilename = getFilenameFromUri(pickedImageFileUri);;
                                     InputStream pickedImageInputStream = getContentResolver().openInputStream(pickedImageFileUri);
-                                    String pickedImageFilename = getFilenameFromUri(pickedImageFileUri);;
                                     Log.i(TAG, "Succeeded in getting input stream from file on phone! Filename is: " + pickedImageFilename);
-                                    uploadInputStreamToS3(pickedImageInputStream, pickedImageFilename);
+                                    ImageView previewShareImageView = findViewById(R.id.previewShareImageView);
+                                    previewShareImageView.setImageBitmap(BitmapFactory.decodeStream(pickedImageInputStream));
+//                                    ImageView taskItemImageView = findViewById(R.id.taskItemImageView);
+//                                    taskItemImageView.setImageBitmap(BitmapFactory.decodeFile(success.getFile().getPath()));
+//                                    uploadInputStreamToS3(pickedImageInputStream, pickedImageFilename);
                                 } catch (FileNotFoundException fnfe){
                                     Log.e(TAG, "File not found File picker: " + fnfe.getMessage(), fnfe);
                                 }
@@ -225,19 +288,5 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         }
         return 0;
-    }
-
-    protected void uploadInputStreamToS3(InputStream pickedImageFileInputStream, String pickedImageFilename){
-        Amplify.Storage.uploadInputStream(
-                pickedImageFilename,
-                pickedImageFileInputStream,
-                success -> {
-                    Log.i(TAG, "Succeeded in getting uploaded file to S3. Key is: " + success.getKey());
-                    awsImageKey = success.getKey();
-                },
-                failure -> {
-                    Log.e(TAG, "Failed in getting uploaded file to S3. Key is: " + pickedImageFilename + " with error: " + failure.getMessage(), failure);
-                }
-        );
     }
 }

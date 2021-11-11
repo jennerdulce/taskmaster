@@ -61,7 +61,7 @@
         app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addTaskUploadImageButton"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.342" />
 
     <TextView
         android:id="@+id/taskCountTextView"
@@ -94,10 +94,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/addTaskFormButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toEndOf="@+id/addTaskFormButton"
         app:layout_constraintTop_toTopOf="@+id/addTaskFormButton"
-        app:layout_constraintVertical_bias="0.586"
+        app:layout_constraintVertical_bias="0.517"
         tools:text='"Submitted!"' />
 
     <TextView
@@ -156,8 +156,21 @@
         android:layout_height="wrap_content"
         android:text="@string/UploadImage"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teamTitleTextView"
-        app:layout_constraintVertical_bias="0.149"
-        tools:layout_editor_absoluteX="32dp" />
+        app:layout_constraintVertical_bias="0.247" />
+
+    <ImageView
+        android:id="@+id/previewShareImageView"
+        android:layout_width="82dp"
+        android:layout_height="94dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addTaskUploadImageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/addTaskUploadImageButton"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

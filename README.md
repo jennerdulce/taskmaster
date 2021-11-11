@@ -77,23 +77,23 @@
 
 #### Task Detail Page
 
-![Task Detail Page](screenshots/taskTitleDisplay.png)
+![Task Detail Page](screenshots/lab28/taskTitleDisplay.png)
 
 #### Settings Page
 
-![Settings Page](screenshots/userSettings.png)
+![Settings Page](screenshots/lab28/userSettings.png)
 
 #### Homepage
 
-![Homepage](screenshots/welcomeDisplay.png)
+![Homepage](screenshots/lab28/welcomeDisplay.png)
 
 #### Task List Display
 
-![Settings Page](screenshots/taskDisplay.png)
+![Settings Page](screenshots/lab28/taskDisplay.png)
 
 #### Recycler View Task Page
 
-![Homepage](screenshots/home.png)
+![Homepage](screenshots/lab28/home.png)
 
 ## LAB 29: Room
 
@@ -150,11 +150,11 @@
 
 #### Add Task Team
 
-![Add Task](screenshots/addTaskTeam.png)
+![Add Task](screenshots/lab33/addTaskTeam.png)
 
 #### Settings
 
-![Settings](screenshots/settingsTeam.png)
+![Settings](screenshots/lab33/settingsTeam.png)
 
 ## LAB 34: Publishing to the Play Store
 
@@ -184,23 +184,23 @@
 
 #### Login
 
-![Login](screenshots/loginActivity.png)
+![Login](screenshots/lab36/loginActivity.png)
 
 #### Signup
 
-![Signup](screenshots/signupActivity.png)
+![Signup](screenshots/lab36/signupActivity.png)
 
 #### Verify Activity
 
-![Verify Activity](screenshots/verifyActivity.png)
+![Verify Activity](screenshots/lab36/verifyActivity.png)
 
 #### Username Display
 
-![Username Display](screenshots/usernameDisplay.png)
+![Username Display](screenshots/lab36/usernameDisplay.png)
 
 ## LAB 37: S3
 
-### Uploads
+### Feature Tasks
 
 #### User Login
 
@@ -214,7 +214,37 @@
 
 #### Task Detail
 
-![Task Detail image](screenshots/s3uploadimage.png)
+![Task Detail image](screenshots/lab37/s3uploadimage.png)
+
+## LAB 38: Intent Filter
+
+### Feature Tasks
+
+#### Adding a Task from Another Application
+
+- Add an intent filter to your application such that a user can hit the “share” button on an image in another application, choose TaskMaster as the app to share that image with, and be taken directly to the Add a Task activity with that image pre-selected.
+
+### Screenshots
+
+#### Google Image
+
+![Google Image](screenshots/lab38/imageongoogle.png)
+
+#### Share
+
+![Share](screenshots/lab38/share.png)
+
+#### Image Preview
+
+![Image Preview](screenshots/lab38/imagepreview.png)
+
+#### Updated List
+
+![Updated List](screenshots/lab38/updatedlist.png)
+
+#### Details
+
+![Details](screenshots/lab38/details.png)
 
 ## Changelog
 
@@ -229,3 +259,5 @@
 - [11/9/2021] Implemented selction with Andriod file picker
 - [11/9/2021] Implemented ability to upload selected image to s3 bucket after choosing saving task
 - [11/9/2021] Image is displayed on the task detail activity
+- [11/10/2021] Added intent filter to application allows user to 'share' an image and open the taskmaster app
+- [11/10/2021] Displays a preview of image to be uploaded
