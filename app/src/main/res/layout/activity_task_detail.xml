@@ -7,6 +7,31 @@
     tools:context=".activities.TaskDetailActivity">
 
     <TextView
+        android:id="@+id/cityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#6B888888"
+        app:layout_constraintBottom_toBottomOf="@+id/cityTitleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.221"
+        app:layout_constraintStart_toEndOf="@+id/cityTitleTextView"
+        app:layout_constraintTop_toTopOf="@+id/cityTitleTextView"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="@string/CityTItle" />
+
+    <TextView
+        android:id="@+id/longitudeTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/LongitudeText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/latitudeTitleTextView"
+        app:layout_constraintVertical_bias="0.092" />
+
+    <TextView
         android:id="@+id/taskDetailsHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,14 +46,14 @@
 
     <TextView
         android:id="@+id/taskDetailsDescTextView"
-        android:layout_width="331dp"
-        android:layout_height="290dp"
+        android:layout_width="345dp"
+        android:layout_height="167dp"
         android:text="@string/LoremText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskItemImageView"
-        app:layout_constraintVertical_bias="0.244" />
+        app:layout_constraintVertical_bias="0.081" />
 
     <TextView
         android:id="@+id/taskDetailsTeamTextView"
@@ -51,4 +76,54 @@
         app:layout_constraintTop_toBottomOf="@+id/taskDetailsTeamTextView"
         app:layout_constraintVertical_bias="0.112"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/latitudeTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/LatitudeText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityTitleTextView"
+        app:layout_constraintVertical_bias="0.16" />
+
+    <TextView
+        android:id="@+id/cityTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CityTItle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskDetailsDescTextView"
+        app:layout_constraintVertical_bias="0.649" />
+
+    <TextView
+        android:id="@+id/latitudeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#6B888888"
+        app:layout_constraintBottom_toBottomOf="@+id/latitudeTitleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toEndOf="@+id/latitudeTitleTextView"
+        app:layout_constraintTop_toTopOf="@+id/latitudeTitleTextView"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="@string/LatitudeText" />
+
+    <TextView
+        android:id="@+id/longitudeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#6B888888"
+        app:layout_constraintBottom_toBottomOf="@+id/longitudeTitleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintStart_toEndOf="@+id/longitudeTitleTextView"
+        app:layout_constraintTop_toTopOf="@+id/longitudeTitleTextView"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="@string/LongitudeText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

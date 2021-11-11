@@ -55,9 +55,15 @@ public class TaskDetailActivity extends AppCompatActivity {
                         TextView taskDetailsHeader = findViewById(R.id.taskDetailsHeaderTextView);
                         TextView taskDetailsDescription = findViewById(R.id.taskDetailsDescTextView);
                         TextView taskDetailsTeamTextView = findViewById(R.id.taskDetailsTeamTextView);
+                        TextView cityTextView = findViewById(R.id.cityTextView);
+                        TextView latitudeTextView = findViewById(R.id.latitudeTextView);
+                        TextView longitudeTextView = findViewById(R.id.longitudeTextView);
                         taskDetailsHeader.setText(taskItemInfo.getTaskName());
                         taskDetailsTeamTextView.setText(taskItemInfo.getAssignedTeam().getTeamName());
                         taskDetailsDescription.setText(taskItemInfo.getBody());
+                        cityTextView.setText(taskItemInfo.getTaskCity());
+                        latitudeTextView.setText(taskItemInfo.getTaskLatitude());
+                        longitudeTextView.setText(taskItemInfo.getTaskLongitude());
                     });
                     taskItemCompletableFuture.complete(taskItemInfo);
                 },

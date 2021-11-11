@@ -23,6 +23,9 @@ mutation CreateTaskItem(
       updatedAt
     }
     taskImageKey
+    taskLatitude
+    taskLongitude
+    taskCity
     _version
     _deleted
     _lastChangedAt
@@ -54,6 +57,9 @@ mutation UpdateTaskItem(
       updatedAt
     }
     taskImageKey
+    taskLatitude
+    taskLongitude
+    taskCity
     _version
     _deleted
     _lastChangedAt
@@ -85,6 +91,9 @@ mutation DeleteTaskItem(
       updatedAt
     }
     taskImageKey
+    taskLatitude
+    taskLongitude
+    taskCity
     _version
     _deleted
     _lastChangedAt
@@ -107,6 +116,9 @@ mutation CreateAssignedTeam(
         body
         status
         taskImageKey
+        taskLatitude
+        taskLongitude
+        taskCity
         _version
         _deleted
         _lastChangedAt
@@ -138,6 +150,9 @@ mutation UpdateAssignedTeam(
         body
         status
         taskImageKey
+        taskLatitude
+        taskLongitude
+        taskCity
         _version
         _deleted
         _lastChangedAt
@@ -169,6 +184,9 @@ mutation DeleteAssignedTeam(
         body
         status
         taskImageKey
+        taskLatitude
+        taskLongitude
+        taskCity
         _version
         _deleted
         _lastChangedAt
