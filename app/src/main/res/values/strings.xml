@@ -37,4 +37,5 @@
     <string name="LoginButton">Log In</string>
     <string name="LogoutButton">Logout</string>
     <string name="UploadImage">Upload Image</string>
+    <string name="FindImage">Find Image</string>
 </resources>
