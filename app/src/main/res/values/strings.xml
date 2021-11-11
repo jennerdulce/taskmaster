@@ -38,4 +38,7 @@
     <string name="LogoutButton">Logout</string>
     <string name="UploadImage">Upload Image</string>
     <string name="FindImage">Find Image</string>
+    <string name="CityTItle" >City</string>
+    <string name="LatitudeText">Latitude</string>
+    <string name="LongitudeText">Longitude</string>
 </resources>

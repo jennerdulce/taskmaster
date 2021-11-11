@@ -5,12 +5,17 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -28,19 +33,24 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.AssignedTeam;
 import com.amplifyframework.datastore.generated.model.TaskItem;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
 import com.jennerdulce.taskmaster.models.StatusEnum;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class AddTaskActivity extends AppCompatActivity {
     public final static String TAG = "jdd_taskmaster_add_task";
+    public final static int FINE_LOCATION_PERMISSION_CODE = 1;
 
     // For creating new task
     TaskRecyclerViewAdapter taskRecyclerViewAdapter;
@@ -57,6 +67,12 @@ public class AddTaskActivity extends AppCompatActivity {
     Uri pickedImageFileUri;
     String pickedImageFilename;
 
+    Geocoder geocoder;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    String latitude;
+    String longitude;
+    String city;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +81,35 @@ public class AddTaskActivity extends AppCompatActivity {
 
         // Needed here
         activityResultLauncher = getImagePickingActivityResultLauncher();
+
+
+
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION_CODE);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+            latitude = Double.toString(location.getLatitude());
+            longitude = Double.toString(location.getLongitude());
+            try {
+                List<Address> addressGuesses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                Address address = addressGuesses.get(0);
+                city = address.getLocality();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         // Explicit intent (share)
         Intent intent = getIntent();
@@ -185,6 +230,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 .body(taskBodyPlainTextString)
                 .status(chosenStatus)
                 .taskImageKey(awsImageKey)
+                .taskLatitude(latitude)
+                .taskLongitude(longitude)
+                .taskCity(city)
                 .build();
 
         Amplify.API.mutate(

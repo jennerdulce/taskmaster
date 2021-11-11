@@ -4,10 +4,14 @@ import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.TEAMNAM
 import static com.jennerdulce.taskmaster.activities.UserSettingsActivity.USERNAME_KEY;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -24,6 +28,10 @@ import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.AssignedTeam;
 import com.amplifyframework.datastore.generated.model.TaskItem;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationToken;
 import com.jennerdulce.taskmaster.R;
 import com.jennerdulce.taskmaster.adapters.TaskRecyclerViewAdapter;
 
@@ -44,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     protected static Resources res;
 
     TaskRecyclerViewAdapter taskRecyclerViewAdapter;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

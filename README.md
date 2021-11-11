@@ -246,6 +246,24 @@
 
 ![Details](screenshots/lab38/details.png)
 
+## LAB 39: Location
+
+### Feature Tasks
+
+#### Location
+
+- When the user adds a task, their location should be retrieved and included as part of the saved Task.
+
+#### Displaying Location
+
+- On the Task Detail activity, the location of a Task should be displayed if it exists.
+
+### Screenshots
+
+#### Latitude and Longitude Display
+
+![Location](screenshots/lab39/location.png)
+
 ## Changelog
 
 - [11/2/2021] Removed rooms and implemented AWS Amplify and DynamoDB
@@ -261,3 +279,5 @@
 - [11/9/2021] Image is displayed on the task detail activity
 - [11/10/2021] Added intent filter to application allows user to 'share' an image and open the taskmaster app
 - [11/10/2021] Displays a preview of image to be uploaded
+- [11/11/2021] Added Google Play Location api to retrieve location of phone
+- [11/10/2021] Location data now displayed on Task Details Activity

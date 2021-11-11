@@ -43,4 +43,5 @@ dependencies {
     implementation 'com.amplifyframework:aws-storage-s3:1.28.3'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-alpha03'
     implementation 'com.amplifyframework:aws-auth-cognito:1.28.3'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }
